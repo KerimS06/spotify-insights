@@ -10,7 +10,7 @@ import (
 func GetAccessToken() (TokenResponse, error) {
 	client := resty.New()
 	resp, err := client.R().
-		SetHeader("Authorization", "Basic "+config.TokenEndpoint).
+		SetHeader("Authorization", "Basic "+config.EncodedCredentials).
 		SetFormData(map[string]string{
 			"grant_type": "client_credentials",
 		}).Post(config.TokenEndpoint)
