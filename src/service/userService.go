@@ -30,19 +30,15 @@ func (s *userService) FindByName(name string) (collection.User, error) {
 }
 
 func (s *userService) Insert(u collection.User) (*mongo.InsertOneResult, error) {
-	_, err := s.FindByName(u.UserName)
-
-	if err == nil {
-		return nil, fmt.Errorf("error:%s, given: %s,", err.Error(), u.UserName)
-	}
-
-	res, err := s.conn.DB.Collection(s.collName).InsertOne(s.conn.Ctx, u)
-
+	user, err := s.FindByName(u.UserName)
 	if err != nil {
-		return nil, fmt.Errorf("user could not be inserted, given: %v, error: %s", u, err.Error())
+		res, err := s.conn.DB.Collection(s.collName).InsertOne(s.conn.Ctx, u)
+		if err != nil {
+			return nil, fmt.Errorf("user could not be inserted, given: %v, error: %s", u, err.Error())
+		}
+		return res, nil
 	}
-
-	return res, nil
+	return &mongo.InsertOneResult{InsertedID: user.ID}, nil
 }
 
 func (s *userService) Delete(name string) error {
