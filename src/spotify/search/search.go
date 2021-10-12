@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/We-Code-at-Nights/spotify-insights/src/collection"
-	"github.com/We-Code-at-Nights/spotify-insights/src/config"
 	"github.com/We-Code-at-Nights/spotify-insights/src/spotify/util"
 	"github.com/go-resty/resty/v2"
 )
@@ -24,7 +23,7 @@ func TrackByNameAndArtist(trackName, artistName string) (collection.Track, error
 			"limit": "1",
 			"q":     fmt.Sprintf(`track:"%s" artist:"%s"`, trackName, artistName),
 			"type":  "track",
-		}).Get(config.SearchEndpoint)
+		}).Get(util.SearchEndpoint)
 	if err != nil {
 		return collection.Track{}, err
 	} else if resp.IsError() {
