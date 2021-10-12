@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/We-Code-at-Nights/spotify-insights/src/collection"
-	"github.com/We-Code-at-Nights/spotify-insights/src/config"
+	"github.com/We-Code-at-Nights/spotify-insights/src/spotify/artistApi"
 	"github.com/We-Code-at-Nights/spotify-insights/src/spotify/util"
 	"github.com/go-resty/resty/v2"
 )
@@ -24,7 +24,7 @@ func TrackByNameAndArtist(trackName, artistName string) (collection.Track, error
 			"limit": "1",
 			"q":     fmt.Sprintf(`track:"%s" artist:"%s"`, trackName, artistName),
 			"type":  "track",
-		}).Get(config.SearchEndpoint)
+		}).Get(util.SearchEndpoint)
 	if err != nil {
 		return collection.Track{}, err
 	} else if resp.IsError() {
@@ -44,9 +44,9 @@ func TrackByNameAndArtist(trackName, artistName string) (collection.Track, error
 	artists := make([]collection.Artist, 0)
 
 	for _, artist := range item.Artists {
-		a := collection.Artist{
-			ID:   artist.ID,
-			Name: artist.Name,
+		a, err := artistApi.FindByID(artist.ID)
+		if err != nil {
+			return collection.Track{}, err
 		}
 
 		artists = append(artists, a)

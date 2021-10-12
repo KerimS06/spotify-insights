@@ -14,7 +14,7 @@ func GetAccessToken() (TokenResponse, error) {
 		SetHeader("Authorization", "Basic "+config.EncodedCredentials).
 		SetFormData(map[string]string{
 			"grant_type": "client_credentials",
-		}).Post(config.TokenEndpoint)
+		}).Post(TokenEndpoint)
 	if err != nil {
 		return TokenResponse{}, err
 	} else if resp.IsError() {
