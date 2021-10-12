@@ -12,8 +12,7 @@ type TrackResponse struct {
 				ReleaseDate string `json:"release_date"`
 			} `json:"album"`
 			Artists []struct {
-				ID   string `json:"id"`
-				Name string `json:"name"`
+				ID string `json:"id"`
 			} `json:"artists"`
 		} `json:"items"`
 	} `json:"tracks"`
